@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CANF-VC: Conditional Augmented Normalizing Flows for Video Compression</title>
+    <script type="text/javascript" src="assets/latexit.js"></script>
+    <script type="text/javascript">
+      
+    LatexIT.add('p',true);
+    </script>
+
+    <!-- CSS includes -->
+    <link href="assets/bootstrap.css" rel="stylesheet">
+    <link href="assets/css.css" rel="stylesheet" type="text/css">
+    <link href="assets/mystyle.css" rel="stylesheet">
+    <link href="assets/lightbox2-2.11.3/dist/css/lightbox.css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <script type="text/javascript" src="path-to-MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <div id="header" class="container-fluid">
+      <div class="row">
+        <h1>CANF-VC: Conditional Augmented Normalizing Flows for Video Compression</h1>
+        <div class="authors">
+          Yung-Han Ho, Chih-Peng Chang, Peng-Yu Chen, Alessandro Gnutti, Wen-Hsiao Peng
+        </div>
+      </div>
+    
+      <p style="text-align:center;">
+              <a href="https://en.nycu.edu.tw/" target="_blank"><img src="assets/210204-NYCU (1).png" height="80"></a>
+               
+              <a href="http://mapl.nctu.edu.tw/" target="_blank"><img src="assets/mapl_logo.png"  height="100"></a>
+      </p>
+    </div>
+    <div class="container" id="abstractdiv">
+      <h2>Abstract</h2>
+      This paper presents an end-to-end learning-based video compression system, termed CANF-VC, based on conditional augmented normalizing flows (ANF). 
+      Most learned video compression systems adopt the same hybrid-based coding architecture as the traditional codecs. Recent research on conditional 
+      coding has shown the sub-optimality of the hybrid-based coding and opens up opportunities for deep generative models to take a key role in creating 
+      new coding frameworks. CANF-VC represents a new attempt that leverages the conditional ANF to learn a video generative model for conditional inter-frame 
+      coding. We choose ANF because it is a special type of generative model, which includes variational autoencoder as a special case and is able to achieve 
+      better expressiveness. CANF-VC also extends the idea of conditional coding to motion coding, forming a purely conditional coding framework. Extensive  
+      experimental results on commonly used datasets confirm the superiority of CANF-VC to the state-of-the-art methods.</div>
+
+    <div class="container" id="banner">
+    <h2>Overall Architecture</h2>
+    <div id="overview">
+      <div class="col-md-6">
+        <p style="text-align:center;">
+          <a href="assets/overall_diagram.png" data-lightbox="Exp1"><img src="assets/architecture/overall_diagram.png" width="110%"></a>
+          <caption>(a) the proposed CANF-VC framework</caption>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p style="text-align:center;">
+          <a href="assets/inter_coder.png" data-lightbox="Exp1"><img src="assets/architecture/inter_coder.png"  width="88%"></a>
+          
+          <br><caption>(b) the CANF-based inter-frame coder $\{ G_\pi, G_\pi^{-1} \}$</caption>
+        </p>
+      </div>
+    </div>
+    </div>
+
+
+    <p style="text-align:center;"> Note: The CANF-based motion coder $\{ F_\pi, F_\pi^{-1} \}$ follows the same design as the inter-frame coder, with $x_t, x_c$ 
+      replaced by $f_t, f_c$, respectively.</p>
+    <div class="container" id="method">
+    <h2>System overview</h2>
+    <p style="text-align:left;">
+    Fig. (a) depicts our CANF-based video compression system, abbreviated as CANF-VC. It includes two major components: (1) the CANF-based inter-frame coder $\{G_\pi, G_\pi^{-1}\}$
+    and (2) the CANF-based motion coder $\{F_\pi, F_\pi^{-1}\}$. The inter-frame coder encodes a video frame $x_t$ conditionally, given the motion -compensated frame $x_c$. It departs 
+    from the conventional residual coding by maximizing the conditional log-likelihood $p(x_t|x_c)$ with a onditional, multi-step ANF model. The motion coder shares a similar architecture 
+    to the inter-frame coder. It extends conditional coding to motion coding, in order to signal the flow map $f_t$, which characterizes the motion between $x_t$ and its reference 
+    frame $\hat{x}_{t-1}$. In our work, $f_t$ is estimated by PWC-Net. The compressed flow map $\hat{f}_t$ serves to warp the reference frame $\hat{x}_{t-1}$, with the warped result 
+    enhanced further by a motion compensation network to arrive at $x_c$. To formulate a condition for conditional motion coding, we introduce a flow extrapolation network to extrapolate
+    a flow map $f_c$ from three previously decoded frames $\hat{x}_{t-1}, \hat{x}_{t-2}, \hat{x}_{t-3}$ and two decoded flow maps $\hat{f}_{t-1}, \hat{f}_{t-2}$. Note that we expand the 
+    condition of $p(x_t | \hat{x}_{\textless t})$ from previously decoded frames $\{\hat{x}_{\textless t}\}$ to include also previously decoded flows $\{\hat{f}_{\textless t}\}$.
+    </p></div>
+
+    <!--
+    <div class="container" id="paperdiv">
+      <h2>Paper</h2>
+      <a href="assets/paper.pdf" download="Neural Frank-Wolfe Policy Optimization for Region-of-Interest Intra-Frame Coding with HEVC/H.265.pdf">
+        <div class="thumbs">
+          <img src="assets/thumbnails/paper_1.jpg" width="19%">
+          <img src="assets/thumbnails/paper_2.jpg" width="19%">
+          <img src="assets/thumbnails/paper_3.jpg" width="19%">
+          <img src="assets/thumbnails/paper_4.jpg" width="19%">
+          <img src="assets/thumbnails/paper_5.jpg" width="19%">
+        </div>
+      </a>
+    -->
+
+    <div class="container" id="exp_results">
+    <h2>Subjective Quality Comparison</h2>
+    <p>
+      The reconstruction quality on sequence selected from UVG, HEVC class B, and MCL-JCV dataset. 
+      <br>
+      <p>Note: In order to compare with DCVC fairly, we apply the same intra-frame coder to DCVC.</p>
+    </p>
+    <div align="center"> 
+    <table width="1000">
+      <thead>
+        <tr>
+            <th class="text-center" scope="col">Ground Truth</th>
+            <th class="text-center" scope="col">DCVC (ANFIC)</th>
+            <th class="text-center" scope="col">CANF-VC</th>
+            <th class="text-center" scope="col">DCVC-ssim (ANFIC)</th>
+            <th class="text-center" scope="col">CANF-VC-ssim</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="assets/comparison/crop_Jockey_GT.png"  width="250" height="300"/></td>
+          <td><img src="assets/comparison/crop_Jockey_DCVC-anfic.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_Jockey_CANFVC.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_Jockey_DCVC-anfic-ssim.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_Jockey_CANFVC-ssim.png"  width="250" height="300""/></td>
+        </tr>
+        <tr>
+          <th class="text-center" scope="col"></th>
+          <th class="text-center" scope="col">PSNR-RGB: 33.84dB<br>0.0184 bpp</th>
+          <th class="text-center" scope="col">PSNR-RGB: 34.50dB<br>0.0109 bpp</th>
+          <th class="text-center" scope="col">MS-SSIM-RGB: 0.967<br>0.0336 bpp</th>
+          <th class="text-center" scope="col">MS-SSIM-RGB: 0.966<br>0.0271 bpp</th>
+      </tr>
+      </tbody>
+    </table>
+    <br>
+    <table width="1000">
+      <thead>
+        <tr>
+            <th class="text-center" scope="col">Ground Truth</th>
+            <th class="text-center" scope="col">DCVC (ANFIC)</th>
+            <th class="text-center" scope="col">CANF-VC</th>
+            <th class="text-center" scope="col">DCVC-ssim (ANFIC)</th>
+            <th class="text-center" scope="col">CANF-VC-ssim</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="assets/comparison/crop_BQTerrace_GT.png"  width="250" height="300"/></td>
+          <td><img src="assets/comparison/crop_BQTerrace_DCVC-anfic.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_BQTerrace_CANFVC.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_BQTerrace_DCVC-anfic-ssim.png" width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_BQTerrace_CANFVC-ssim.png"  width="250" height="300""/></td>
+        </tr>
+        <tr>
+          <th class="text-center" scope="col"></th>
+          <th class="text-center" scope="col">PSNR-RGB: 27.71dB<br>0.0441 bpp</th>
+          <th class="text-center" scope="col">PSNR-RGB: 29.00dB<br>0.0396 bpp</th>
+          <th class="text-center" scope="col">MS-SSIM-RGB: 0.952<br>0.0425 bpp</th>
+          <th class="text-center" scope="col">MS-SSIM-RGB: 0.955<br>0.0465 bpp</th>
+      </tr>
+      </tbody>
+    </table>
+    <br>
+    <table width="1000">
+      <thead>
+        <tr>
+            <th class="text-center" scope="col">Ground Truth</th>
+            <th class="text-center" scope="col">DCVC (ANFIC)</th>
+            <th class="text-center" scope="col">CANF-VC</th>
+            <th class="text-center" scope="col">DCVC-ssim (ANFIC)</th>
+            <th class="text-center" scope="col">CANF-VC-ssim</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="assets/comparison/crop_videoSRC14_GT.png"  width="250" height="300"/></td>
+          <td><img src="assets/comparison/crop_videoSRC14_DCVC-anfic.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_videoSRC14_CANFVC.png"  width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_videoSRC14_DCVC-anfic-ssim.png" width="250" height="300""/></td>
+          <td><img src="assets/comparison/crop_videoSRC14_CANFVC-ssim.png"  width="250" height="300""/></td>
+        </tr>
+        <tr>
+          <th class="text-center" scope="col"></th>
+          <th class="text-center" scope="col">PSNR-RGB: 32.68dB<br>0.0343 bpp</th>
+          <th class="text-center" scope="col">PSNR-RGB: 33.26dB<br>0.0267 bpp</th>
+          <th class="text-center" scope="col">MS-SSIM-RGB: 0.972<br>0.0506 bpp</th>
+          <th class="text-center" scope="col">MS-SSIM-RGB: 0.970<br>0.0390 bpp</th>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+  
+  
+    
+    </div>
+
+    <div id=footer><br></div>
+    <!-- Javascript includes -->
+    <script src="assets/jquery-1.js"></script>
+    <script src="assets/bootstrap.js"></script>
+    <script src="assets/lightbox2-2.11.3/dist/js/lightbox.js"></script>
+  
+
+</body></html>
